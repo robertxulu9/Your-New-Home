@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Input Form</title>
+    <!-- Include jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h1>Submit Text Data</h1>
+    <form id="textForm">
+        <label for="textInput">Enter some text:</label>
+        <input type="text" id="textInput" name="textInput" required>
+        <button type="submit">Submit</button>
+    </form>
+
+    <div id="responseMessage"></div>
+
+    <script>
+        $(document).ready(function() {
+            $('#textForm').on('submit', function(event) {
+                event.preventDefault(); // Prevent the default form submission
+
+                var formData = {
+                    text: $('#textInput').val()
+                };
+
+                $.ajax({
+                    url: '/api/text', // The URL to which the form data should be sent
+                    type: 'POST',
+                    data: JSON.stringify(formData),
+                    contentType: 'application/json',
+                    success: function(response) {
+                        $('#responseMessage').text('Data submitted successfully!');
+                        $('#textForm')[0].reset(); // Reset the form after successful submission
+                    },
+                    error: function(xhr, status, error) {
+                        $('#responseMessage').text('An error occurred: ' + xhr.responseText);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
