@@ -82,6 +82,35 @@
             <!-- Footer content here (same as existing footer) -->
         </div>
     </footer>
+    <script>
+        $(document).ready(function() {
+            $('#registerForm').on('submit', function(e) {
+                e.preventDefault();
+    
+                const formData = {
+                    first_name: $('#name').val(),
+                    last_name: $('#name').val(),
+                    username: $('#username').val(),
+                    email: $('#email').val(),
+                    password: $('#password').val(),
+                    confirm_password: $('#confirm-password').val()
+                };
+    
+                $.ajax({
+                    url: 'http://localhost:5000/api/users/register',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(formData),
+                    success: function(response) {
+                        alert(response.message);
+                    },
+                    error: function(error) {
+                        alert('Error: ' + error.responseJSON.message);
+                    }
+                });
+            });
+        });
+    </script>
 
     <!-- loader -->
     <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
