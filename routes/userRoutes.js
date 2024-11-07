@@ -1,43 +1,36 @@
-// routes/userRoutes.js
+// /routes/userRoutes.js
 const express = require('express');
 const bcrypt = require('bcryptjs');
-const User = require('../models/User');
-
+const db = require('../config/db');
 const router = express.Router();
 
-// Register Route
-router.post('/register', async (req, res) => {
-    const { first_name, last_name, username, email, password, confirm_password } = req.body;
+// Register new user
+router.post('/register', (req, res) => {
+  const { username, email, password } = req.body;
+  
+  if (!username || !email || !password) {
+    return res.status(400).send('All fields are required');
+  }
 
-    if (password !== confirm_password) {
-        return res.status(400).json({ message: 'Passwords do not match' });
+  // Check if user already exists
+  const sqlCheck = 'SELECT * FROM users WHERE email = ?';
+  db.query(sqlCheck, [email], (err, result) => {
+    if (result.length > 0) {
+      return res.status(400).send('User already exists');
     }
 
-    try {
-        // Check if user exists
-        let user = await User.findOne({ where: { email } });
-        if (user) {
-            return res.status(400).json({ message: 'User already exists' });
-        }
+    // Hash password
+    bcrypt.hash(password, 10, (err, hashedPassword) => {
+      if (err) throw err;
 
-        // Hash password
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(password, salt);
-
-        // Create new user
-        user = await User.create({
-            first_name,
-            last_name,
-            username,
-            email,
-            password: hashedPassword,
-        });
-
-        res.status(201).json({ message: 'User registered successfully' });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Server error' });
-    }
+      // Insert new user into the database
+      const sqlInsert = 'INSERT INTO users (username, email, password) VALUES (?, ?, ?)';
+      db.query(sqlInsert, [username, email, hashedPassword], (err, result) => {
+        if (err) return res.status(500).send(err);
+        res.status(201).send('User registered');
+      });
+    });
+  });
 });
 
 module.exports = router;

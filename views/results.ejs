@@ -1,0 +1,88 @@
+<%- include('partials/header') %>
+
+
+<section class="ftco-section goto-here">
+    <div class="container">
+        <div class="row">
+            <% if (properties.length === 0) { %>
+                <p>No properties found matching your criteria.</p>
+            <% } else { %>
+                <% properties.forEach(function(property) { %>
+                    <div class="col-md-4">
+                        <div class="property-wrap ftco-animate">
+                            <div class="img d-flex align-items-center justify-content-center" 
+                                 style="background-image: url('<%= property.image %>');">
+                                <a href="/properties/<%= property.id %>" class="icon d-flex align-items-center justify-content-center btn-custom">
+                                    <span class="ion-ios-link"></span>
+                                </a>
+                                <% if (property.agent) { %>
+                                    <div class="list-agent d-flex align-items-center">
+                                        <a href="/agent/<%= property.agent.id %>" class="agent-info d-flex align-items-center">
+                                            <div class="img-2 rounded-circle" 
+                                                 style="background-image: url('<%= property.agent.image %>');"></div>
+                                            <h3 class="mb-0 ml-2"><%= property.agent.name %></h3>
+                                        </a>
+                                    </div>
+                                <% } %>
+                            </div>
+                            <div class="text">
+                                <p class="price mb-3"><span class="orig-price">K<%= property.price %></span></p>
+                                <h3 class="mb-0"><a href="/properties/<%= property.id %>"><%= property.name %></a></h3>
+                                <span class="location d-inline-block mb-3">
+                                    <i class="ion-ios-pin mr-2"></i><%= property.address %>
+                                </span>
+                                <ul class="property_list">
+                                    <li><span class="flaticon-bed"></span><%= property.bedrooms %></li>
+                                    <li><span class="flaticon-bathtub"></span><%= property.bathrooms %></li>
+                                    <li><span class="flaticon-floor-plan"></span><%= property.lot_area %> sqft</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                <% }) %>
+            <% } %>
+        </div>
+    </div>
+</section>
+
+<script>
+    // Display toast notification if there's a message from the session
+    <% if (message) { %>
+        window.onload = function() {
+            // Show the toast with the message from the session
+            showToast('<%= message %>');
+        }
+    <% } %>
+
+    // Function to show a toast
+    function showToast(message) {
+        const toast = document.createElement('div');
+        toast.className = 'toast';
+        toast.textContent = message;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.classList.add('show'), 100); // Fade in effect
+        setTimeout(() => toast.classList.remove('show'), 3000); // Fade out effect
+        setTimeout(() => toast.remove(), 4000); // Remove from DOM
+    }
+</script>
+
+<style>
+    /* Basic styling for the toast notification */
+    .toast {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background-color: #333;
+        color: #fff;
+        padding: 10px 20px;
+        border-radius: 5px;
+        opacity: 0;
+        transition: opacity 0.5s ease;
+        z-index: 1000;
+    }
+    .toast.show {
+        opacity: 1;
+    }
+</style>
+
+<%- include('partials/footer') %>

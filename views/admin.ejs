@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Manage Users</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        .admin-container {
+            margin-top: 30px;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        th, td {
+            text-align: center;
+            padding: 10px;
+        }
+
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+
+        td {
+            background-color: #f9f9f9;
+        }
+
+        .action-buttons button {
+            margin-right: 10px;
+        }
+
+        .role-select {
+            min-width: 120px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container admin-container">
+    <h2 class="text-center">Admin - Manage Users</h2>
+    <a href="login.html"> <button type="submit" class="btn btn-danger" onclick="return confirm('loging out?')">Logout</button></a>
+    
+    <!-- Display the list of users -->
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Email</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Role</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- Loop through users -->
+            <% users.forEach(function(user) { %>
+            <tr>
+                <td>
+                    <input type="text" class="form-control" value="<%= user.username %>" name="username_<%= user.id %>">
+                </td>
+                <td>
+                    <input type="email" class="form-control" value="<%= user.email %>" name="email_<%= user.id %>">
+                </td>
+                <td>
+                    <input type="text" class="form-control" value="<%= user.firstName %>" name="firstName_<%= user.id %>">
+                </td>
+                <td>
+                    <input type="text" class="form-control" value="<%= user.lastName %>" name="lastName_<%= user.id %>">
+                </td>
+                <td>
+                    <!-- Role Assignment Dropdown -->
+                    <form action="/admin/assign-role" method="POST" style="display: inline-block;">
+                        <input type="hidden" name="userId" value="<%= user.id %>">
+                        <select name="role" class="form-control role-select" onchange="this.form.submit()">
+                            <option value="pending" <%= user.role === 'pending' ? 'selected' : '' %>>Pending</option>
+                            <option value="admin" <%= user.role === 'admin' ? 'selected' : '' %>>Admin</option>
+                            <option value="agent" <%= user.role === 'agent' ? 'selected' : '' %>>Agent</option>
+                        </select>
+                    </form>
+                </td>
+                <td class="action-buttons">
+                    <!-- Reset Password Form -->
+                    <form action="/admin/reset-password" method="POST" style="display: inline-block;">
+                        <input type="hidden" name="userId" value="<%= user.id %>">
+                        <button type="submit" class="btn btn-warning">Reset Password</button>
+                    </form>
+
+                    <!-- Save Changes Form -->
+                    <form action="/admin/edit-user" method="POST" style="display: inline-block;">
+                        <input type="hidden" name="userId" value="<%= user.id %>">
+                        <input type="hidden" name="username">
+                        <input type="hidden" name="email">
+                        <input type="hidden" name="firstName">
+                        <input type="hidden" name="lastName">
+                        <button type="submit" class="btn btn-success">Save</button>
+                    </form>
+
+                    <script>
+                        document.querySelectorAll('.btn-success').forEach(button => {
+                            button.addEventListener('click', function (event) {
+                                const form = event.target.closest('form');
+                                const row = form.closest('tr');
+                    
+                                // Grab the values from the editable inputs in this row
+                                const username = row.querySelector('input[name="username_<%= user.id %>"]').value;
+                                const email = row.querySelector('input[name="email_<%= user.id %>"]').value;
+                                const firstName = row.querySelector('input[name="firstName_<%= user.id %>"]').value;
+                                const lastName = row.querySelector('input[name="lastName_<%= user.id %>"]').value;
+                    
+                                // Populate the hidden inputs with the values from the row
+                                form.querySelector('input[name="username"]').value = username;
+                                form.querySelector('input[name="email"]').value = email;
+                                form.querySelector('input[name="firstName"]').value = firstName;
+                                form.querySelector('input[name="lastName"]').value = lastName;
+                            });
+                        });
+                    </script>
+                    
+                    
+                    <!-- Delete User Form -->
+                    <form action="/admin/delete-user" method="POST" style="display: inline-block;">
+                        <input type="hidden" name="userId" value="<%= user.id %>">
+                        <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this user?')">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            <% }); %>
+        </tbody>
+    </table>
+</div>
+
+<!-- Scripts -->
+<script src="/index.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

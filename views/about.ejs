@@ -1,0 +1,114 @@
+<%- include('partials/header') %>
+
+<br />
+<br />
+<br />
+
+
+<section class="about-section">
+  <style>
+     /* Center all h2 elements */
+  h2 {
+      text-align: center;
+      color: #e6d436/* rgb(212,202,104)Replace with any RGB color values */
+  }
+      .about-section {
+          padding: 50px 0;
+      }
+
+      .about-image {
+          width: 100%;
+          height: 400px; /* Adjust as needed */
+          background-size: cover;
+          background-position: center;
+          position: relative;
+      }
+
+      .about-text {
+          padding: 20px;
+          text-align: justify;
+      }
+
+      /* Alternating image alignment */
+      .row:nth-child(odd) .about-image {
+          border-bottom-left-radius: 50px;
+      }
+
+      .row:nth-child(even) .about-image {
+          border-top-right-radius: 50px;
+      }
+
+      /* Responsive adjustments */
+      @media (max-width: 768px) {
+          .row .about-image, .row .about-text {
+              width: 100%;
+              text-align: center;
+          }
+          .about-image {
+              height: 200px; /* Adjust for smaller screens */
+              border-radius: 0;
+          }
+      }
+  </style>
+
+  <div class="container">
+      <!-- First Section -->
+      <div class="row align-items-center mb-5">
+          <div class="col-md-6">
+              <div class="about-image" style="background-image: url('images/about1.jpg');"></div>
+          </div>
+          <div class="col-md-6">
+              <div class="about-text">
+                  <h2>All About Us</h2>
+                  <p>Every real estate transaction is different. Every search, every showing, every staging, every offer, every closing… all unique. And getting it right isn’t just about following a process… it’s about following up. It’s about following through. It’s about following your instincts.
+
+ 
+
+                    At American Real Estate, ERA Powered, it's our job to follow your lead. Only have time for after hours showings? No problem. A constant communicator? Done. Never done this before? Got it covered. Long wish list? Check, check and check. Sure, we know real estate markets and how to make great deals, but helping you find exactly what you’re looking (and more) for is how we've built our reputation.</p>
+              </div>
+          </div>
+      </div>
+
+      <!-- Second Section (Alternates Image and Text Sides) -->
+      <div class="row align-items-center mb-5 flex-row-reverse">
+          <div class="col-md-6">
+              <div class="about-image" style="background-image: url('images/about7.jpg');"></div>
+          </div>
+          <div class="col-md-6">
+              <div class="about-text">
+                  <h2>Our Mission</h2>
+                  <p>We are committed to making real estate accessible and trustworthy, empowering people with transparent information and personalized support.</p>
+              </div>
+          </div>
+      </div>
+
+      <div class="row align-items-center mb-5">
+        <div class="col-md-6">
+            <div class="about-image" style="background-image: url('images/about3.jpg');"></div>
+        </div>
+        <div class="col-md-6">
+            <div class="about-text">
+                <h2>Working with Us</h2>
+                <p>We’ve built our reputation on two things: strengthening the communites we serve and solidifying our real estate expertise. Whether we’re innovating new ways to market and capture leads, or attending to your specific needs throughout your real estate journey, we know that relationships are what drives the real estate industry. And with our industry-leading tools, learning and programs you can be sure that every detail will be covered.</p>
+            </div>
+        </div>
+    </div>
+
+        <div class="row align-items-center mb-5 flex-row-reverse">
+          <div class="col-md-6">
+              <div class="about-image" style="background-image: url('images/about11.jpg');"></div>
+          </div>
+          <div class="col-md-6">
+              <div class="about-text">
+                  <h2>Local Expertise</h2>
+                  <p>Real Estate is local. It’s about knowing the neighborhoods, the communities and the people who live there, to provide you with the valuable insights you need to make the most important decisions. We are 100% locally owned and operated. Many of our Realtors have spent their entire lives getting to know every part of our communities. We are passionate about our home towns.</p>
+              </div>
+          </div>
+      </div>
+      <!-- Additional sections as needed, alternating sides -->
+  </div>
+</section>
+
+
+
+<%- include('partials/footer') %>

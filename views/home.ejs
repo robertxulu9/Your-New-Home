@@ -1,0 +1,258 @@
+<%- include('partials/header') %>
+
+<section class="ftco-section ftco-no-pb">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="search-wrap-1 ftco-animate">
+          <form action="/properties/search" method="GET" class="search-property-1">
+            <div class="row">
+              
+              <!-- Location Dropdown -->
+              <div class="col-lg align-items-end">
+                <div class="form-group">
+                  <label for="#">Location</label>
+                  <div class="form-field">
+                    <div class="icon"><span class="ion-ios-search"></span></div>
+                    <select name="location" class="form-control">
+                      <option value="">Select Location</option>
+                      <% locations.forEach(location => { %>
+                        <option value="<%= location.city %>"><%= location.city %></option>
+                      <% }) %>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Compound Dropdown -->
+              <div class="col-lg align-items-end">
+                <div class="form-group">
+                  <label for="#">Compound</label>
+                  <div class="form-field">
+                    <select name="compound" class="form-control">
+                      <option value="">Select Compound</option>
+                      <% compounds.forEach(compound => { %>
+                        <option value="<%= compound.compound %>"><%= compound.compound %></option>
+                      <% }) %>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Price Limit Field -->
+              <div class="col-lg align-items-end">
+                <div class="form-group">
+                  <label for="#">Price Limit</label>
+                  <div class="form-field">
+                    <div class="select-wrap">
+                      <div class="icon"><span class="ion-ios-arrow-down"></span></div>
+                      <select name="priceLimit" class="form-control">
+                        <option value="5000">K5,000</option>
+                        <option value="10000">K10,000</option>
+                        <option value="50000">K50,000</option>
+                        <option value="100000">K100,000</option>
+                        <option value="200000">K200,000</option>
+                        <option value="300000">K300,000</option>
+                        <option value="400000">K400,000</option>
+                        <option value="500000">K500,000</option>
+                        <option value="600000">K600,000</option>
+                        <option value="700000">K700,000</option>
+                        <option value="800000">K800,000</option>
+                        <option value="900000">K900,000</option>
+                        <option value="1000000">K1,000,000</option>
+                        <option value="2000000">K2,000,000</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Submit Button -->
+              <div class="col-lg align-self-end">
+                <div class="form-group">
+                  <div class="form-field">
+                    <input type="submit" value="Search Property" class="form-control btn btn-primary">
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<section class="ftco-section goto-here">
+    <div class="container">
+        <div class="col-md-12 heading-section text-center ftco-animate mb-5">
+            <span class="subheading">What we offer</span>
+          <h2 class="mb-2">New listings</h2>
+        </div>
+        <div class="row">
+            <% properties.slice(0, 6).forEach(function(property) { %> <!-- Change here to limit to 6 properties -->
+                <div class="col-md-4">
+                    <div class="property-wrap ftco-animate">
+                        <div class="img d-flex align-items-center justify-content-center" 
+                             style="background-image: url('<%= property.image %>');">
+                            <a href="/properties/<%= property.id %>" class=" icon d-flex align-items-center justify-content-center btn-custom">
+                                <span class="ion-ios-link"></span>
+                            </a>
+                            <div class="list-agent d-flex align-items-center">
+                                <span href="/agent/<%= property.agent.id %>" class=" agent-info d-flex align-items-center">
+                                    <div class="img-2 rounded-circle" 
+                                         style="background-image: url('<%= property.agent.image %>');"></div>
+                                    <h3 class="mb-0 ml-2"><%= property.agent.name %></h3>
+                                </span>
+
+                            </div>
+                        </div>
+                        <div class="text">
+                            <p class="price mb-3"><span class="orig-price">K<%= property.price %></span></p>
+                            <h3 class="mb-0"><span><%= property.name %></span></h3>
+                            <span class="location d-inline-block mb-3">
+                                <i class="ion-ios-pin mr-2"></i><%= property.address %>
+                            </span>
+                            <ul class="property_list">
+                                <li><span class="flaticon-bed"></span><%= property.bedrooms %></li>
+                                <li><span class="flaticon-bathtub"></span><%= property.bathrooms %></li>
+                                <li><span class="flaticon-floor-plan"></span><%= property.lot_area %> sqft</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            <% }) %>
+        </div>
+    </div>
+</section>
+
+<section class="ftco-section ftco-fullwidth">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row justify-content-center">
+      <div class="col-md-12 heading-section text-center ftco-animate mb-5">
+          <span class="subheading">Services</span>
+        <h2 class="mb-2">Why Choose Us?</h2>
+      </div>
+    </div>
+    </div>
+    <div class="container-fluid px-0">
+        <div class="row d-md-flex text-wrapper align-items-stretch">
+                <div class="one-half mb-md-0 mb-4 img d-flex align-self-stretch" style="background-image: url('images/about.jpg');"></div>
+                <div class="one-half half-text d-flex justify-content-end align-items-center">
+                    <div class="text-inner pl-md-5">
+                        <div class="row d-flex">
+                  <div class="col-md-12 d-flex align-self-stretch ftco-animate">
+                    <div class="media block-6 services-wrap d-flex">
+                        <div class="icon d-flex justify-content-center align-items-center"><span class="flaticon-piggy-bank"></span></div>
+                      <div class="media-body pl-4">
+                        <h3>No Downpayment</h3>
+                        <p>Explore flexible financing options that make homeownership accessible without the burden of an upfront payment.</p>
+                      </div>
+                    </div>      
+                  </div>
+                  <div class="col-md-12 d-flex align-self-stretch ftco-animate">
+                    <div class="media block-6 services-wrap d-flex">
+                        <div class="icon d-flex justify-content-center align-items-center"><span class="flaticon-wallet"></span></div>
+                      <div class="media-body pl-4">
+                        <h3>All Cash Offer</h3>
+                        <p>Enjoy a streamlined buying process with all cash offers, enabling quicker transactions and stronger negotiating positions.</p>
+                      </div>
+                    </div>      
+                  </div>
+                  <div class="col-md-12 d-flex align-self-stretch ftco-animate">
+                    <div class="media block-6 services-wrap d-flex">
+                        <div class="icon d-flex justify-content-center align-items-center"><span class="flaticon-file"></span></div>
+                      <div class="media-body pl-4">
+                        <h3>Experts in Your Corner</h3>
+                        <p>Our dedicated team brings extensive industry knowledge and experience to guide you through every step of your real estate journey.</p>
+                      </div>
+                    </div>      
+                  </div>
+                  <div class="col-md-12 d-flex align-self-stretch ftco-animate">
+                    <div class="media block-6 services-wrap d-flex">
+                        <div class="icon d-flex justify-content-center align-items-center"><span class="flaticon-locked"></span></div>
+                      <div class="media-body pl-4">
+                        <h3>Locked in Pricing</h3>
+                        <p>Secure fixed pricing to protect your investment from market volatility and ensure peace of mind during the buying process.</p>
+                      </div>
+                    </div>      
+                  </div>
+                </div>
+        </div>
+                </div>
+        </div>
+    </div>
+</section>
+
+<section class="ftco-counter ftco-section img" id="section-counter">
+    <div class="overlay"></div>
+<div class="container">
+    <div class="row">
+  <div class="col-md-6 col-lg-3 justify-content-center counter-wrap ftco-animate">
+    <div class="block-18">
+      <div class="text text-border d-flex align-items-center">
+        <strong class="number" data-number="305">0</strong>
+        <span>Area <br>Population</span>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 col-lg-3 justify-content-center counter-wrap ftco-animate">
+    <div class="block-18">
+      <div class="text text-border d-flex align-items-center">
+        <strong class="number" data-number= <%= totalProperties %>></strong>
+        <span>Total <br>Properties</span>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 col-lg-3 justify-content-center counter-wrap ftco-animate">
+    <div class="block-18">
+      <div class="text text-border d-flex align-items-center">
+        <strong class="number" data-number="209">0</strong>
+        <span>Average <br>House</span>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 col-lg-3 justify-content-center counter-wrap ftco-animate">
+    <div class="block-18">
+      <div class="text d-flex align-items-center">
+        <strong class="number" data-number="67">0</strong>
+        <span>Total <br>Branches</span>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</section>
+
+
+
+
+<section class="ftco-section ftco-agent">
+    <div class="container">
+        <div class="col-md-12 heading-section text-center ftco-animate">
+            <span class="subheading">Agents</span>
+          <h2 class="mb-4">Our Agents</h2>
+        </div>
+        <div class="row">
+            <% agents.slice(0, 4).forEach(agent => { %> <!-- Only show 4 agents -->
+                <div class="col-md-3 ftco-animate">
+                    <div class="agent">
+                        <div class="img">
+                            <img src="<%= agent.profilePicture || '/images/default-profile.jpg' %>" class="img-fluid" alt="<%= agent.username %>">
+                        </div>
+                        <div class="desc">
+                            <h3><span><%= agent.username %></span></h3>
+                            <p class="h-info"><span class="ion-ios-filing icon"></span> <span class="details"><%= agent.propertyCount %> Properties</span></p>
+                        </div>
+                    </div>
+                </div>
+            <% }); %>
+        </div>
+    </div>
+</section>
+
+
+<%- include('partials/footer') %>

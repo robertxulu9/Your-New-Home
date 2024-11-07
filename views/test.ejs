@@ -1,0 +1,46 @@
+<%- include('partials/header') %>
+
+  <a href="/agent/<%= property.agent_id %>" class="agent-info d-flex align-items-center">
+                                        <div class="img-2 rounded-circle" 
+                                             style="background-image: url(<%= property.agent_image || '/images/default-agent.jpg' %>);"></div>
+                                        <h3 class="mb-0 ml-2"><%= property.agent_name %></h3>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="text">
+                                <p class="price mb-3"><span class="orig-price">K<%= property.price %></span></p>
+                                <!-- <h3 class="mb-0"><a href="/properties/<%= property.id %>"><%= property.name %></a></h3> -->
+                                <span class="location d-inline-block mb-3">
+                                    <i class="ion-ios-pin mr-2"></i><%= property.address %>
+                                </span>
+                                <ul class="property_list">
+                                    <li><span class="flaticon-bed"></span><%= property.bedrooms %></li>
+                                    <li><span class="flaticon-bathtub"></span><%= property.bathrooms %></li>
+                                    <li><span class="flaticon-floor-plan"></span><%= property.lot_area %> sqft</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div><section class="ftco-section goto-here">
+    <div class="container">
+        <h2 class="mb-4">Property Listings</h2>
+        <div class="row">
+            <% if (properties && properties.length > 0) { %>
+                <% properties.forEach(function(property) { %>
+                    <div class="col-md-4">
+                        <div class="property-wrap ftco-animate">
+                            <div class="img d-flex align-items-center justify-content-center" 
+                                 <!-- style="background-image: url(<%= property.image || '/images/default-image.jpg' %>);"> -->
+                                <a href="/properties/<%= property.id %>" class="icon d-flex align-items-center justify-content-center btn-custom">
+                                    <span class="ion-ios-link"></span>
+                                </a>
+                                <div class="list-agent d-flex align-items-center">
+                                  
+                <% }) %>
+            <% } else { %>
+                <p>No properties found matching your search criteria.</p>
+            <% } %>
+        </div>
+    </div>
+</section>
+
+<%- include('partials/footer') %>

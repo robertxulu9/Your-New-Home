@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Register - Findstate</title>
+    <title>Register - Your New Home</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     
@@ -24,7 +24,7 @@
     
     <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
         <div class="container">
-            <a class="navbar-brand" href="index.html">Findstate</a>
+            <a class="navbar-brand" href="index.html">Your New Home</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="oi oi-menu"></span> Menu
             </button>
@@ -39,33 +39,33 @@
                 <div class="col-md-8">
                     <div class="register-wrap p-4 p-md-5">
                         <h2 class="mb-4">Register</h2>
-                        <form action="#" method="post">
+                        <form action="/register" method="POST">
                             <div class="form-group">
-                                <label for="name">First Name</label>
-                                <input type="text" class="form-control" id="name" placeholder="First Name" required>
+                              <label for="name">First Name</label>
+                              <input type="text" class="form-control" id="firstName" name="firstName" placeholder="First Name" required>
                             </div>
                             <div class="form-group">
-                                <label for="name">Last Name</label>
-                                <input type="text" class="form-control" id="name" placeholder="Last Name" required>
+                              <label for="name">Last Name</label>
+                              <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Last Name" required>
                             </div>
                             <div class="form-group">
-                                <label for="username">Username</label>
-                                <input type="text" class="form-control" id="username" placeholder="Username" required>
+                              <label for="username">Username</label>
+                              <input type="text" class="form-control" id="username" name="username" placeholder="Username" required>
                             </div>
                             <div class="form-group">
-                                <label for="email">Email</label>
-                                <input type="email" class="form-control" id="email" placeholder="Email" required>
+                              <label for="email">Email</label>
+                              <input type="email" class="form-control" id="email" name="email" placeholder="Email" required>
                             </div>
                             <div class="form-group">
-                                <label for="password">Password</label>
-                                <input type="password" class="form-control" id="password" placeholder="Password" required>
+                              <label for="password">Password</label>
+                              <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
                             </div>
                             <div class="form-group">
-                                <label for="confirm-password">Confirm Password</label>
-                                <input type="password" class="form-control" id="confirm-password" placeholder="Confirm Password" required>
+                              <label for="confirm-password">Confirm Password</label>
+                              <input type="password" class="form-control" id="confirm-password" name="confirmPassword" placeholder="Confirm Password" required>
                             </div>
                             <div class="form-group">
-                                <button type="submit" class="btn btn-primary form-control">Register</button>
+                              <button type="submit" class="btn btn-primary form-control">Register</button>
                             </div>
                             <div class="form-group">
                                 <p class="text-center">Already have an account? <a href="login.html">Login here</a></p>
@@ -82,7 +82,7 @@
             <!-- Footer content here (same as existing footer) -->
         </div>
     </footer>
-    <script>
+    <!-- <script>
         $(document).ready(function() {
             $('#registerForm').on('submit', function(e) {
                 e.preventDefault();
@@ -110,9 +110,57 @@
                 });
             });
         });
-    </script>
+    </script> -->
 
     <!-- loader -->
+
+    <script>
+        document.getElementById('registrationForm').addEventListener('submit', async function(event) {
+          event.preventDefault(); // Prevent the default form submission
+          
+          const firstName = document.getElementById('firstName').value;
+          const lastName = document.getElementById('lastName').value;
+          const username = document.getElementById('username').value;
+          const email = document.getElementById('email').value;
+          const password = document.getElementById('password').value;
+          const confirmPassword = document.getElementById('confirm-password').value;
+          
+          if (password !== confirmPassword) {
+            alert('Passwords do not match!');
+            return;
+          }
+      
+          const formData = {
+            firstName,
+            lastName,
+            username,
+            email,
+            password
+          };
+      
+          try {
+            const response = await fetch('/api/users/register', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(formData),
+            });
+      
+            if (response.ok) {
+              alert('Registration successful! Redirecting to login page...');
+              window.location.href = 'login.html'; // Redirect to login page
+            } else {
+              const errorData = await response.json();
+              alert('Error: ' + errorData.message || 'Registration failed');
+            }
+          } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred during registration');
+          }
+        });
+      </script>
+      
     <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
 
     <script src="js/jquery.min.js"></script>

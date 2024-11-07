@@ -1,0 +1,124 @@
+<%- include('partials/header') %>
+
+<section class="ftco-section ftco-no-pb">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="search-wrap-1 ftco-animate">
+                    <form action="/properties/search" method="GET" class="search-property-1">
+                        <div class="row">
+                            <!-- Location Dropdown -->
+                            <div class="col-lg align-items-end">
+                                <div class="form-group">
+                                    <label for="#">Location</label>
+                                    <div class="form-field">
+                                        <div class="icon"><span class="ion-ios-search"></span></div>
+                                        <select name="location" class="form-control">
+                                            <option value="">Select Location</option>
+                                            <% locations.forEach(location => { %>
+                                                <option value="<%= location.city %>"><%= location.city %></option>
+                                            <% }) %>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Compound Dropdown -->
+                            <div class="col-lg align-items-end">
+                                <div class="form-group">
+                                    <label for="#">Compound</label>
+                                    <div class="form-field">
+                                        <select name="compound" class="form-control">
+                                            <option value="">Select Compound</option>
+                                            <% compounds.forEach(compound => { %>
+                                                <option value="<%= compound.compound %>"><%= compound.compound %></option>
+                                            <% }) %>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Price Limit Field -->
+                            <div class="col-lg align-items-end">
+                                <div class="form-group">
+                                    <label for="#">Price Limit</label>
+                                    <div class="form-field">
+                                        <div class="select-wrap">
+                                            <div class="icon"><span class="ion-ios-arrow-down"></span></div>
+                                            <select name="priceLimit" class="form-control">
+                                                <option value="5000">K5,000</option>
+                                                <option value="10000">K10,000</option>
+                                                <option value="50000">K50,000</option>
+                                                <option value="100000">K100,000</option>
+                                                <option value="200000">K200,000</option>
+                                                <option value="300000">K300,000</option>
+                                                <option value="400000">K400,000</option>
+                                                <option value="500000">K500,000</option>
+                                                <option value="600000">K600,000</option>
+                                                <option value="700000">K700,000</option>
+                                                <option value="800000">K800,000</option>
+                                                <option value="900000">K900,000</option>
+                                                <option value="1000000">K1,000,000</option>
+                                                <option value="2000000">K2,000,000</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Submit Button -->
+                            <div class="col-lg align-self-end">
+                                <div class="form-group">
+                                    <div class="form-field">
+                                        <input type="submit" value="Search Property" class="form-control btn btn-primary">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="ftco-section goto-here">
+    <div class="container">
+        <div class="row">
+            <% properties.forEach(function(property) { %>
+                <div class="col-md-4">
+                    <div class="property-wrap ftco-animate">
+                        <div class="img d-flex align-items-center justify-content-center" 
+                             style="background-image: url(<%= property.image %>);">
+                            <a href="/properties/<%= property.id %>" class="icon d-flex align-items-center justify-content-center btn-custom">
+                                <span class="ion-ios-link"></span>
+                            </a>
+                            <div class="list-agent d-flex align-items-center">
+                                <span href="/agent/<%= property.agent.id %>" class="agent-info d-flex align-items-center">
+                                    <div class="img-2 rounded-circle" 
+                                         style="background-image: url(<%= property.agent.image %>);"></div>
+                                    <h3 class="mb-0 ml-2"><%= property.agent.name %></h3>
+                                </span>
+                              
+                            </div>
+                        </div>
+                        <div class="text">
+                            <p class="price mb-3"><span class="orig-price">K<%= property.price %></span></p>
+                            <h3 class="mb-0"><a href="/properties/<%= property.id %>"><%= property.name %></a></h3>
+                            <span class="location d-inline-block mb-3">
+                                <i class="ion-ios-pin mr-2"></i><%= property.address %>
+                            </span>
+                            <ul class="property_list">
+                                <li><span class="flaticon-bed"></span><%= property.bedrooms %></li>
+                                <li><span class="flaticon-bathtub"></span><%= property.bathrooms %></li>
+                                <li><span class="flaticon-floor-plan"></span><%= property.lot_area %> sqft</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            <% }) %>
+        </div>
+    </div>
+</section>
+
+<%- include('partials/footer') %>

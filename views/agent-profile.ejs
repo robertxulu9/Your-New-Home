@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agent Profile</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+
+<%- include('partials/agentHeader') %> <!-- Include header partial -->
+
+<section class="ftco-section ftco-property-details">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="profile-container">
+                            <h2 class="text-center">Agent Profile</h2>
+
+                            <!-- Display existing profile picture -->
+                            <div class="text-center">
+                                <img src="<%= agent.profilePicture || '/uploads/default-profile.jpg' %>" class="profile-picture" alt="Profile Picture" style="width: 150px; height: 150px; border-radius: 50%; object-fit: cover; margin-bottom: 20px;">
+                            </div>
+
+                            <!-- Form to update profile picture and contact details -->
+                            <form action="/agent/profile" method="POST" enctype="multipart/form-data">
+                                <div class="form-group">
+                                    <label for="profilePicture">Upload Profile Picture</label>
+                                    <input type="file" class="form-control-file" id="profilePicture" name="profilePicture">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="contactNumber">Contact Number</label>
+                                    <input type="text" class="form-control" id="contactNumber" name="contactNumber" value="<%= agent.contactNumber || '' %>" placeholder="Enter contact number">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="email">Email</label>
+                                    <input type="email" class="form-control" id="email" name="email" value="<%= agent.email %>" readonly>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="address">Address</label>
+                                    <input type="text" class="form-control" id="address" name="address" value="<%= agent.address || '' %>" placeholder="Enter address">
+                                </div>
+
+                                <button type="submit" class="btn btn-primary">Save Profile</button>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<%- include('partials/footer') %> <!-- Include footer partial -->
