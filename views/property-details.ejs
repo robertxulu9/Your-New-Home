@@ -75,14 +75,13 @@
                                         <li class="check"><span class="ion-ios-checkmark-circle"></span>Lot Area: <%= property.lot_area %> SQ FT</li>
                                         <li class="check"><span class="ion-ios-checkmark-circle"></span>Bed Rooms: <%= property.bedrooms %></li>
                                         <li class="check"><span class="ion-ios-checkmark-circle"></span>Bath Rooms: <%= property.bathrooms %></li>
-                                        <li class="check"><span class="ion-ios-checkmark-circle"></span>Garage: 2</li>
+                                        <li class="check"><span class="ion-ios-checkmark-circle"></span>Garage: <%= property.garage ? property.garage : 'Not specified' %></li>
                                     </ul>
                                 </div>
                                 <div class="col-md-4">
                                     <ul class="features">
-                                        <li class="check"><span class="ion-ios-checkmark-circle"></span>Year Built: <%= property.year_built %></li>
-                                        <li class="check"><span class="ion-ios-checkmark-circle"></span>Stories: <%= property.floors %></li>
-                                    </ul>
+                                        <li class="check"><span class="ion-ios-checkmark-circle"></span>Year Built: <%= property.year_built ? property.year_built : 'Not specified' %></li>
+                                        <li class="check"><span class="ion-ios-checkmark-circle"></span>Stories: <%= property.floors ? property.floors : 'Not specified' %></li>                                    </ul>
                                 </div>
                             </div>
                         </div>

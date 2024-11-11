@@ -268,7 +268,8 @@ app.get('/properties/:id', (req, res) => {
 
   const sql = `
     SELECT p.id, p.price, p.images, p.bedrooms, p.bathrooms, p.lot_area, 
-           p.street, p.compound, p.city, p.location, p.agent_id, 
+           p.street, p.compound, p.city, p.location, p.agent_id,
+           p.garage, p.year_built, p.floors,
            u.firstName AS agent_name, u.profilePicture AS agent_image,
            u.contactNumber AS agent_contact, u.email AS agent_email 
     FROM properties p
@@ -293,11 +294,14 @@ app.get('/properties/:id', (req, res) => {
       const processedProperty = {
         id: property.id,
         price: property.price,
-        images: imagesArray.map(img =>  img), // Adjust path if necessary
+        images: imagesArray.map(img => img), // Adjust path if necessary
         address: `${property.street}, ${property.compound}, ${property.city}, ${property.location}`,
         bedrooms: property.bedrooms,
         bathrooms: property.bathrooms,
         lot_area: property.lot_area,
+        garage: property.garage,         // Add these values to processedProperty
+        year_built: property.year_built,
+        floors: property.floors,
         agent: {
           name: property.agent_name,
           image: property.agent_image,
@@ -306,14 +310,14 @@ app.get('/properties/:id', (req, res) => {
         }
       };
 
+      console.log(processedProperty);  // Debug log
       res.render('property-details', { property: processedProperty });
     } else {
       res.status(404).send('Property not found');
-      // return res.redirect('/listings');
-  
     }
   });
 });
+
 
 
 

@@ -17,11 +17,11 @@
                                 </a>
                                 <% if (property.agent) { %>
                                     <div class="list-agent d-flex align-items-center">
-                                        <a href="/agent/<%= property.agent.id %>" class="agent-info d-flex align-items-center">
+                                        <span href="/agent/<%= property.agent.id %>" class="agent-info d-flex align-items-center">
                                             <div class="img-2 rounded-circle" 
                                                  style="background-image: url('<%= property.agent.image %>');"></div>
                                             <h3 class="mb-0 ml-2"><%= property.agent.name %></h3>
-                                        </a>
+                                        </span>
                                     </div>
                                 <% } %>
                             </div>

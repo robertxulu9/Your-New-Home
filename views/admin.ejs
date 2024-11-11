@@ -4,144 +4,127 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin - Manage Users</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-
-        .admin-container {
-            margin-top: 30px;
-        }
-
-        table {
-            width: 100%;
-            margin-top: 20px;
-        }
-
-        th, td {
-            text-align: center;
-            padding: 10px;
-        }
-
-        th {
-            background-color: #007bff;
-            color: white;
-        }
-
-        td {
-            background-color: #f9f9f9;
-        }
-
-        .action-buttons button {
-            margin-right: 10px;
-        }
-
-        .role-select {
-            min-width: 120px;
-        }
-    </style>
+    
+    <!-- Including same CSS as in header -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/open-iconic-bootstrap.min.css">
+    <link rel="stylesheet" href="/css/animate.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/owl.carousel.min.css">
+    <link rel="stylesheet" href="/css/owl.theme.default.min.css">
+    <link rel="stylesheet" href="/css/magnific-popup.css">
+    <link rel="stylesheet" href="/css/aos.css">
+    <link rel="stylesheet" href="/css/ionicons.min.css">
+    <link rel="stylesheet" href="/css/bootstrap-datepicker.css">
+    <link rel="stylesheet" href="/css/jquery.timepicker.css">
+    <link rel="stylesheet" href="/css/flaticon.css">
+    <link rel="stylesheet" href="/css/icomoon.css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
+    <!-- Navbar with custom background color (yellow-greenish) -->
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #d4ca68;" id="ftco-navbar">
+        <div class="container">
+            <a class="navbar-brand" href="/home">Admin - Manage Users</a>
+            <a href="login.html"> 
+            <button type="submit" class="btn btn-danger" onclick="return confirm('Logging out?')">Logout</button>
+        </a>
+        </div>
+    </nav>
 
-<div class="container admin-container">
-    <h2 class="text-center">Admin - Manage Users</h2>
-    <a href="login.html"> <button type="submit" class="btn btn-danger" onclick="return confirm('loging out?')">Logout</button></a>
-    
-    <!-- Display the list of users -->
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th>Username</th>
-                <th>Email</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Role</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Loop through users -->
-            <% users.forEach(function(user) { %>
-            <tr>
-                <td>
-                    <input type="text" class="form-control" value="<%= user.username %>" name="username_<%= user.id %>">
-                </td>
-                <td>
-                    <input type="email" class="form-control" value="<%= user.email %>" name="email_<%= user.id %>">
-                </td>
-                <td>
-                    <input type="text" class="form-control" value="<%= user.firstName %>" name="firstName_<%= user.id %>">
-                </td>
-                <td>
-                    <input type="text" class="form-control" value="<%= user.lastName %>" name="lastName_<%= user.id %>">
-                </td>
-                <td>
-                    <!-- Role Assignment Dropdown -->
-                    <form action="/admin/assign-role" method="POST" style="display: inline-block;">
-                        <input type="hidden" name="userId" value="<%= user.id %>">
-                        <select name="role" class="form-control role-select" onchange="this.form.submit()">
-                            <option value="pending" <%= user.role === 'pending' ? 'selected' : '' %>>Pending</option>
-                            <option value="admin" <%= user.role === 'admin' ? 'selected' : '' %>>Admin</option>
-                            <option value="agent" <%= user.role === 'agent' ? 'selected' : '' %>>Agent</option>
-                        </select>
-                    </form>
-                </td>
-                <td class="action-buttons">
-                    <!-- Reset Password Form -->
-                    <form action="/admin/reset-password" method="POST" style="display: inline-block;">
-                        <input type="hidden" name="userId" value="<%= user.id %>">
-                        <button type="submit" class="btn btn-warning">Reset Password</button>
-                    </form>
+    <!-- Admin Page Content -->
+    <div class="container admin-container mt-5">
+        <h2 class="text-center"></h2>
+        
 
-                    <!-- Save Changes Form -->
-                    <form action="/admin/edit-user" method="POST" style="display: inline-block;">
-                        <input type="hidden" name="userId" value="<%= user.id %>">
-                        <input type="hidden" name="username">
-                        <input type="hidden" name="email">
-                        <input type="hidden" name="firstName">
-                        <input type="hidden" name="lastName">
-                        <button type="submit" class="btn btn-success">Save</button>
-                    </form>
+        <!-- Display the list of users -->
+        <table class="table mt-4">
+            <thead class="table-light">
+                <tr>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Role</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% users.forEach(function(user) { %>
+                <tr>
+                    <td>
+                        <input type="text" class="form-control" value="<%= user.username %>" name="username_<%= user.id %>">
+                    </td>
+                    <td>
+                        <input type="email" class="form-control" value="<%= user.email %>" name="email_<%= user.id %>">
+                    </td>
+                    <td>
+                        <input type="text" class="form-control" value="<%= user.firstName %>" name="firstName_<%= user.id %>">
+                    </td>
+                    <td>
+                        <input type="text" class="form-control" value="<%= user.lastName %>" name="lastName_<%= user.id %>">
+                    </td>
+                    <td>
+                        <form action="/admin/assign-role" method="POST" style="display: inline-block;">
+                            <input type="hidden" name="userId" value="<%= user.id %>">
+                            <select name="role" class="form-control role-select" onchange="this.form.submit()">
+                                <option value="pending" <%= user.role === 'pending' ? 'selected' : '' %>>Pending</option>
+                                <option value="admin" <%= user.role === 'admin' ? 'selected' : '' %>>Admin</option>
+                                <option value="agent" <%= user.role === 'agent' ? 'selected' : '' %>>Agent</option>
+                            </select>
+                        </form>
+                    </td>
+                    <td class="action-buttons">
+                        <!-- Reset Password Form -->
+                        <form action="/admin/reset-password" method="POST" style="display: inline-block;">
+                            <input type="hidden" name="userId" value="<%= user.id %>">
+                            <button type="submit" class="btn btn-warning">Reset Password</button>
+                        </form>
 
-                    <script>
-                        document.querySelectorAll('.btn-success').forEach(button => {
-                            button.addEventListener('click', function (event) {
-                                const form = event.target.closest('form');
-                                const row = form.closest('tr');
-                    
-                                // Grab the values from the editable inputs in this row
-                                const username = row.querySelector('input[name="username_<%= user.id %>"]').value;
-                                const email = row.querySelector('input[name="email_<%= user.id %>"]').value;
-                                const firstName = row.querySelector('input[name="firstName_<%= user.id %>"]').value;
-                                const lastName = row.querySelector('input[name="lastName_<%= user.id %>"]').value;
-                    
-                                // Populate the hidden inputs with the values from the row
-                                form.querySelector('input[name="username"]').value = username;
-                                form.querySelector('input[name="email"]').value = email;
-                                form.querySelector('input[name="firstName"]').value = firstName;
-                                form.querySelector('input[name="lastName"]').value = lastName;
-                            });
-                        });
-                    </script>
-                    
-                    
-                    <!-- Delete User Form -->
-                    <form action="/admin/delete-user" method="POST" style="display: inline-block;">
-                        <input type="hidden" name="userId" value="<%= user.id %>">
-                        <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this user?')">Delete</button>
-                    </form>
-                </td>
-            </tr>
-            <% }); %>
-        </tbody>
-    </table>
-</div>
+                        <!-- Save Changes Form -->
+                        <form action="/admin/edit-user" method="POST" style="display: inline-block;">
+                            <input type="hidden" name="userId" value="<%= user.id %>">
+                            <button type="submit" class="btn btn-success">Save</button>
+                        </form>
 
-<!-- Scripts -->
-<script src="/index.js"></script>
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+                        <!-- Delete User Form -->
+                        <form action="/admin/delete-user" method="POST" style="display: inline-block;">
+                            <input type="hidden" name="userId" value="<%= user.id %>">
+                            <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this user?')">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Footer with custom background color (yellow-greenish) -->
+    <footer class="ftco-footer" style="background-color: #d4ca68;">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 text-center text-light py-3">
+                    <p>&copy; <script>document.write(new Date().getFullYear());</script> Your New Home. All rights reserved.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/jquery-migrate-3.0.1.min.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/jquery.easing.1.3.js"></script>
+    <script src="/js/jquery.waypoints.min.js"></script>
+    <script src="/js/jquery.stellar.min.js"></script>
+    <script src="/js/owl.carousel.min.js"></script>
+    <script src="/js/jquery.magnific-popup.min.js"></script>
+    <script src="/js/aos.js"></script>
+    <script src="/js/jquery.animateNumber.min.js"></script>
+    <script src="/js/bootstrap-datepicker.js"></script>
+    <script src="/js/jquery.timepicker.min.js"></script>
+    <script src="/js/scrollax.min.js"></script>
+    <script src="/js/main.js"></script>
 </body>
 </html>
