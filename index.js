@@ -349,37 +349,39 @@ app.post('/login', (req, res) => {
 
   const sql = 'SELECT * FROM users WHERE username = ?';
   db.query(sql, [username], (err, result) => {
-      if (err) throw err;
+    if (err) throw err;
 
-      if (result.length > 0) {
-          const user = result[0];
+    if (result.length > 0) {
+      const user = result[0];
 
-          // Check if the password matches
-          if (bcrypt.compareSync(password, user.password)) {
-            req.session.userId = user.id;  // Store the userId in session
-            req.session.user = user;
-            
-              // Check the user's role and redirect accordingly
-              if (user.role === 'admin') {
-                  res.redirect('/admin');
-                  console.log('Session data:', req.session);  // Log session data to the console
-              } else if (user.role === 'agent') {
-                  res.redirect('/agent/profile');
-                  console.log('Session data:', req.session);  // Log session data to the console
-              } else {
-                  res.send('Role not assigned yet. Please contact the admin.');
-                  res.redirect('/login.html');
-              }
-          } else {
-              res.send('Incorrect password!');
-              res.redirect('/login.html');
+      // Check if the password matches
+      if (bcrypt.compareSync(password, user.password)) {
+        req.session.userId = user.id; // Store the userId in session
+        req.session.user = user;
 
-          }
+        // Check the user's role and redirect accordingly
+        if (user.role === 'admin') {
+          console.log('Session data:', req.session); // Log session data to the console
+          return res.redirect('/admin');
+        } else if (user.role === 'agent') {
+          console.log('Session data:', req.session); // Log session data to the console
+          return res.redirect('/agent/profile');
+        } else {
+          return res.send('Role not assigned yet. Please contact the admin.');
+        }
       } else {
-          res.send('No user found!');
+        // Incorrect password
+        req.session.message = 'Incorrect password!';
+        return res.redirect('/login.html');
       }
+    } else {
+      // No user found
+      req.session.message = 'No user found!';
+      return res.redirect('/login.html');
+    }
   });
 });
+
 
 
 
