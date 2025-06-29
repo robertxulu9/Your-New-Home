@@ -26,15 +26,22 @@
     <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #d4ca68;" id="ftco-navbar">
         <div class="container">
             <a class="navbar-brand" href="/home">Admin - Manage Users</a>
-            <a href="login.html"> 
-            <button type="submit" class="btn btn-danger" onclick="return confirm('Logging out?')">Logout</button>
-        </a>
+            <a href="/login.html"> 
+                <button type="button" class="btn btn-danger" onclick="return confirm('Logging out?')">Logout</button>
+            </a>
         </div>
     </nav>
 
     <!-- Admin Page Content -->
     <div class="container admin-container mt-5">
-        <h2 class="text-center"></h2>
+        
+        <!-- Display Session Messages -->
+        <% if (typeof message !== 'undefined' && message) { %>
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                <%= message %>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        <% } %>
         
 
         <!-- Display the list of users -->
@@ -52,47 +59,39 @@
             <tbody>
                 <% users.forEach(function(user) { %>
                 <tr>
-                    <td>
-                        <input type="text" class="form-control" value="<%= user.username %>" name="username_<%= user.id %>">
-                    </td>
-                    <td>
-                        <input type="email" class="form-control" value="<%= user.email %>" name="email_<%= user.id %>">
-                    </td>
-                    <td>
-                        <input type="text" class="form-control" value="<%= user.firstName %>" name="firstName_<%= user.id %>">
-                    </td>
-                    <td>
-                        <input type="text" class="form-control" value="<%= user.lastName %>" name="lastName_<%= user.id %>">
-                    </td>
-                    <td>
-                        <form action="/admin/assign-role" method="POST" style="display: inline-block;">
-                            <input type="hidden" name="userId" value="<%= user.id %>">
-                            <select name="role" class="form-control role-select" onchange="this.form.submit()">
+                    <!-- Single Form for All Actions -->
+                    <form action="/admin/action-user" method="POST">
+                        <input type="hidden" name="userId" value="<%= user.id %>">
+                        <td>
+                            <input type="text" class="form-control" value="<%= user.username %>" name="username" required>
+                        </td>
+                        <td>
+                            <input type="email" class="form-control" value="<%= user.email %>" name="email" required>
+                        </td>
+                        <td>
+                            <input type="text" class="form-control" value="<%= user.firstName %>" name="firstName" required>
+                        </td>
+                        <td>
+                            <input type="text" class="form-control" value="<%= user.lastName %>" name="lastName" required>
+                        </td>
+                        <td>
+                            <select name="role" class="form-control role-select" required>
                                 <option value="pending" <%= user.role === 'pending' ? 'selected' : '' %>>Pending</option>
                                 <option value="admin" <%= user.role === 'admin' ? 'selected' : '' %>>Admin</option>
                                 <option value="agent" <%= user.role === 'agent' ? 'selected' : '' %>>Agent</option>
                             </select>
-                        </form>
-                    </td>
-                    <td class="action-buttons">
-                        <!-- Reset Password Form -->
-                        <form action="/admin/reset-password" method="POST" style="display: inline-block;">
-                            <input type="hidden" name="userId" value="<%= user.id %>">
-                            <button type="submit" class="btn btn-warning">Reset Password</button>
-                        </form>
-
-                        <!-- Save Changes Form -->
-                        <form action="/admin/edit-user" method="POST" style="display: inline-block;">
-                            <input type="hidden" name="userId" value="<%= user.id %>">
-                            <button type="submit" class="btn btn-success">Save</button>
-                        </form>
-
-                        <!-- Delete User Form -->
-                        <form action="/admin/delete-user" method="POST" style="display: inline-block;">
-                            <input type="hidden" name="userId" value="<%= user.id %>">
-                            <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this user?')">Delete</button>
-                        </form>
-                    </td>
+                        </td>
+                        <td class="action-buttons">
+                            <!-- Save Button -->
+                            <button type="submit" name="action" value="save" class="btn btn-success">Save</button>
+                            
+                            <!-- Reset Password Button -->
+                            <button type="submit" name="action" value="reset" class="btn btn-warning">Reset Password</button>
+                            
+                            <!-- Delete User Button -->
+                            <button type="submit" name="action" value="delete" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this user?')">Delete</button>
+                        </td>
+                    </form>
                 </tr>
                 <% }); %>
             </tbody>

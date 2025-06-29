@@ -70,6 +70,7 @@ db.query(sql, values, (err, result) => {
 });
 
 
+//admin routes
 app.get('/admin', (req, res) => {
   // Fetch users from the database (optional, if you have user data)
   const sql = 'SELECT * FROM users';
@@ -81,109 +82,206 @@ app.get('/admin', (req, res) => {
   });
 });
 
-//admin route
+//admin route (edit, delete and update)
+// Your existing admin route
 app.get('/admin', (req, res) => {
+  // Fetch users from the database
   const sql = 'SELECT * FROM users';
-  db.query(sql, (err, results) => {
-      if (err) throw err;
-      res.render('admin', { users: results });
-  });
-});
-
-
-app.post('/admin/save-user', (req, res) => {
-  const updatedUsers = [];
-
-  // Loop through each user in the request body based on the dynamic names
-  Object.keys(req.body).forEach((key) => {
-    const match = key.match(/^(username|email|firstName|lastName|role)_(\d+)$/);
-    if (match) {
-      const field = match[1]; // e.g., username, email
-      const userId = match[2]; // e.g., 1, 2 (the user ID)
-      
-      if (!updatedUsers[userId]) {
-        updatedUsers[userId] = {};
+  db.query(sql, (err, users) => {
+      if (err) {
+          console.error('Error fetching users:', err);
+          req.session.message = 'Error fetching users.';
+          return res.redirect('/');
       }
-      updatedUsers[userId][field] = req.body[key];
-    }
-  });
-
-  // Now update each user based on the parsed data
-  updatedUsers.forEach((user, userId) => {
-    const sql = 'UPDATE users SET username = ?, email = ?, firstName = ?, lastName = ?, role = ? WHERE id = ?';
-    db.query(sql, [user.username, user.email, user.firstName, user.lastName, user.role, userId], (err, result) => {
-      if (err) throw err;
-    });
-  });
-
-  // Re-fetch the updated users and render the page with the updated data
-  db.query('SELECT * FROM users', (err, users) => {
-    if (err) throw err;
-    res.render('admin', { users: users, message: 'Users updated successfully' });
+      res.render('admin', { users: users, message: req.session.message });
   });
 });
+
+// Action User Route
+app.post('/admin/action-user', (req, res) => {
+  const { userId, username, email, firstName, lastName, role, action } = req.body;
+
+  if (action === 'save') {
+      // Validate input data
+      if (!username || !email || !firstName || !lastName || !role) {
+          req.session.message = 'All fields are required for saving user information.';
+          return res.redirect('/admin');
+      }
+
+      const sql = 'UPDATE users SET username = ?, email = ?, firstName = ?, lastName = ?, role = ? WHERE id = ?';
+      db.query(sql, [username, email, firstName, lastName, role, userId], (err, result) => {
+          if (err) {
+              console.error('Error updating user:', err);
+              req.session.message = 'Error updating user information.';
+              return res.redirect('/admin');
+          }
+          req.session.message = 'User information updated successfully.';
+          res.redirect('/admin');
+      });
+  } else if (action === 'reset') {
+      // Implement secure reset password logic
+      // For demonstration, we'll set a default password. In production, generate a secure random password.
+      const newPassword = 'reset'; // Replace with secure password generation
+      const hashedPassword = bcrypt.hashSync(newPassword, 10);
+
+      const resetSql = 'UPDATE users SET password = ? WHERE id = ?';
+      db.query(resetSql, [hashedPassword, userId], (err, result) => {
+          if (err) {
+              console.error('Error resetting password:', err);
+              req.session.message = 'Error resetting password.';
+              return res.redirect('/admin');
+          }
+          // Optionally, send the new password to the user's email
+          // sendEmail(user.email, 'Password Reset', `Your new password is: ${newPassword}`);
+
+          req.session.message = 'Password reset successfully.';
+          res.redirect('/admin');
+      });
+  } else if (action === 'delete') {
+      const sql = 'DELETE FROM users WHERE id = ?';
+      db.query(sql, [userId], (err, result) => {
+          if (err) {
+              console.error('Error deleting user:', err);
+              req.session.message = 'Error deleting user.';
+              return res.redirect('/admin');
+          }
+          req.session.message = 'User deleted successfully.';
+          res.redirect('/admin');
+      });
+  } else {
+      req.session.message = 'Unknown action.';
+      res.redirect('/admin');
+  }
+});
+
+
+
+
+
+// app.post('/admin/save-user', (req, res) => {
+//   const updatedUsers = {};
+
+//   // Parse the `req.body` to group updates by user ID
+//   Object.keys(req.body).forEach((key) => {
+//     const match = key.match(/^(username|email|firstName|lastName|role)_(\d+)$/);
+//     if (match) {
+//       const field = match[1]; // Field name
+//       const userId = match[2]; // User ID
+      
+//       // Ensure the user object exists
+//       if (!updatedUsers[userId]) {
+//         updatedUsers[userId] = { id: userId };
+//       }
+//       updatedUsers[userId][field] = req.body[key];
+//     }
+//   });
+
+//   // Convert `updatedUsers` to an array of promises for batch processing
+//   const updatePromises = Object.values(updatedUsers).map((user) => {
+//     const sql = `
+//       UPDATE users 
+//       SET username = ?, email = ?, firstName = ?, lastName = ?, role = ? 
+//       WHERE id = ?
+//     `;
+//     const values = [
+//       user.username || null, 
+//       user.email || null, 
+//       user.firstName || null, 
+//       user.lastName || null, 
+//       user.role || null, 
+//       user.id
+//     ];
+
+//     return new Promise((resolve, reject) => {
+//       db.query(sql, values, (err, result) => {
+//         if (err) return reject(err);
+//         resolve(result);
+//       });
+//     });
+//   });
+
+//   // Execute all updates and then fetch updated users
+//   Promise.all(updatePromises)
+//     .then(() => {
+//       db.query('SELECT * FROM users', (err, users) => {
+//         if (err) throw err;
+//         res.render('admin', { users: users, message: 'Users updated successfully!' });
+//       });
+//     })
+//     .catch((err) => {
+//       console.error('Error updating users:', err);
+//       res.status(500).send('Error updating users');
+//     });
+// });
+
 
 
 //Delete User
-app.post('/admin/delete-user', (req, res) => {
-  const { userId } = req.body;
+// app.post('/admin/delete-user', (req, res) => {
+//   const { userId } = req.body;
 
-  const sql = 'DELETE FROM users WHERE id = ?';
-  db.query(sql, [userId], (err, result) => {
-      if (err) throw err;
-      res.redirect('/admin');
-  });
-});
+//   const sql = 'DELETE FROM users WHERE id = ?';
+//   db.query(sql, [userId], (err, result) => {
+//       if (err) throw err;
+//       res.redirect('/admin');
+//   });
+// });
 
 
 //Edit User Information
-app.post('/admin/edit-user', (req, res) => {
-  const { userId } = req.body;
-  const { username, email, firstName, lastName } = req.body;
+// app.post('/admin/edit-user', (req, res) => {
+//   const { userId } = req.body;
 
-  const sql = 'UPDATE users SET username = ?, email = ?, firstName = ?, lastName = ? WHERE id = ?';
-  db.query(sql, [username, email, firstName, lastName, userId], (err, result) => {
-      if (err) throw err;
-      res.redirect('/admin');
-  });
-});
+//   // Dynamically retrieve the correct fields
+//   const username = req.body[`username_${userId}`];
+//   const email = req.body[`email_${userId}`];
+//   const firstName = req.body[`firstName_${userId}`];
+//   const lastName = req.body[`lastName_${userId}`];
+
+//   const sql = 'UPDATE users SET username = ?, email = ?, firstName = ?, lastName = ? WHERE id = ?';
+//   db.query(sql, [username, email, firstName, lastName, userId], (err, result) => {
+//       if (err) throw err;
+//       res.redirect('/admin');
+//   });
+// });
+
 
 //resteting password route
-app.post('/admin/reset-password', (req, res) => {
-  const { userId } = req.body;
+// app.post('/admin/reset-password', (req, res) => {
+//   const { userId } = req.body;
 
-  const defaultPassword = 'password123';
-  const hashedPassword = bcrypt.hashSync(defaultPassword, 10);
+//   const defaultPassword = 'password123';
+//   const hashedPassword = bcrypt.hashSync(defaultPassword, 10);
 
-  const sql = 'UPDATE users SET password = ? WHERE id = ?';
-  db.query(sql, [hashedPassword, userId], (err, result) => {
-      if (err) throw err;
-      res.redirect('/admin');
-  });
-});
+//   const sql = 'UPDATE users SET password = ? WHERE id = ?';
+//   db.query(sql, [hashedPassword, userId], (err, result) => {
+//       if (err) throw err;
+//       res.redirect('/admin');
+//   });
+// });
 
 //Create the Role Assignment Route
-app.post('/assign-role', (req, res) => {
-  const { username, role } = req.body;
+// app.post('/assign-role', (req, res) => {
+//   const { username, role } = req.body;
 
-  const sql = 'UPDATE users SET role = ? WHERE username = ?';
-  db.query(sql, [role, username], (err, result) => {
-      if (err) throw err;
-      res.redirect('/admin');  // Redirect back to the admin page after role assignment
-  });
-});
+//   const sql = 'UPDATE users SET role = ? WHERE username = ?';
+//   db.query(sql, [role, username], (err, result) => {
+//       if (err) throw err;
+//       res.redirect('/admin');  // Redirect back to the admin page after role assignment
+//   });
+// });
 
 
 // Assigning Roles route
-app.post('/admin/assign-role', (req, res) => {
-  const { userId, role } = req.body;
+// app.post('/admin/assign-role', (req, res) => {
+//   const { userId, role } = req.body;
 
-  const sql = 'UPDATE users SET role = ? WHERE id = ?';
-  db.query(sql, [role, userId], (err, result) => {
-      if (err) throw err;
-      res.redirect('/admin');
-  });
-});
+//   const sql = 'UPDATE users SET role = ? WHERE id = ?';
+//   db.query(sql, [role, userId], (err, result) => {
+//       if (err) throw err;
+//       res.redirect('/admin');
+//   });
+// });
 
 
 // search route
